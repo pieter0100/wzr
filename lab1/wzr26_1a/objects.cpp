@@ -11,6 +11,7 @@
 #include <gl\glu.h>
 #include "objects.h"
 #include "graphics.h"
+#include <map>
 
 extern FILE *f;
 extern Environment env;
@@ -65,7 +66,7 @@ ObjectState MovableObject::State()                // metoda zwracaj¹ca state obi
 
 
 
-void MovableObject::Simulation(float dt)          // obliczenie nowego stateu na podstawie dotychczasowego,
+void MovableObject::Simulation(float dt, map<int, MovableObject*> other_cars)          // obliczenie nowego stateu na podstawie dotychczasowego,
 {                                                // dzia³aj¹cych si³ i czasu, jaki up³yn¹³ od ostatniej symulacji
 
 	if (dt == 0) return;
@@ -247,6 +248,30 @@ void MovableObject::Simulation(float dt)          // obliczenie nowego stateu na
 
 
 	Vector3 vV_pop = state.vV;
+
+	// iteracja po slowniku znalzalem na stackoverflow sprawdzam kolizje z kazdym samochdem w grze
+	for (auto const& x : other_cars)
+	{
+		float distance = sqrt(
+			(state.vPos.x - x.second->state.vPos.x) * (state.vPos.x - x.second->state.vPos.x) +
+			(state.vPos.y - x.second->state.vPos.y) * (state.vPos.y - x.second->state.vPos.y) +
+			(state.vPos.z - x.second->state.vPos.z) * (state.vPos.z - x.second->state.vPos.z)
+		);
+
+		if (distance < length) {
+			fprintf(f, "kolizja");
+			
+			if (vV_forward.x < 0) {
+				vV_forward = { 0,0,0 };
+			}
+			
+			if (vV_forward.x > 0) {
+				vV_forward = { 0,0,0 };
+			}
+		}
+		
+	}
+	
 
 	// sk³adam prêdkoœci w ró¿nych kierunkach oraz efekt przyspieszenia w jeden wektor:    (problem z przyspieszeniem od si³y tarcia -> to przyspieszenie 
 	//      mo¿e dzia³aæ krócej ni¿ dt -> trzeba to jakoœ uwzglêdniæ, inaczej pojazd bêdzie wê¿ykowa³)

@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include <map>
 #include "quaternion.h"
-
+using namespace std;
 #define PI 3.1415926
 
 struct ObjectState
@@ -38,7 +39,7 @@ public:
 	~MovableObject();
 	void ChangeState(ObjectState state);          // zmiana stateu obiektu
 	ObjectState State();        // metoda zwracajaca state obiektu
-	void Simulation(float dt);  // symulacja ruchu obiektu w oparciu o biezacy state, przylozone sily
+	void Simulation(float dt, map<int, MovableObject*> other_cars);  // symulacja ruchu obiektu w oparciu o biezacy state, przylozone sily
 	// oraz czas dzialania sil. Efektem symulacji jest nowy state obiektu 
 	void DrawObject();			   // odrysowanie obiektu					
 };

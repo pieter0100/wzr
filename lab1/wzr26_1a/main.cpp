@@ -143,7 +143,7 @@ void VirtualWorldCycle()
 		SetWindowText(main_window, text); // wyœwietlenie aktualnej iloœci klatek/s w pasku okna			
 	}
 
-	my_car->Simulation(avg_cycle_time);                    // symulacja w³asnego obiektu
+	my_car->Simulation(avg_cycle_time, other_cars);                    // symulacja w³asnego obiektu
 
 	Frame frame;
 	frame.state = my_car->State();               // state w³asnego obiektu 
